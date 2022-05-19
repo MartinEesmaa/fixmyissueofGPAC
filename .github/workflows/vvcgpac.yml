@@ -1,0 +1,24 @@
+name: Fix issue of GPAC
+
+on:
+
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Transcode from mp4 to yuv
+        run: ffmpeg -i bbbbeforenw.mp4 -pix_fmt yuv420p -r 24 -strict 1 bbbbeforenw.yuv
+      - name: Check versions of installed
+        run: vvencapp --version && mp4box -version
+      - name: Encode from YUV to VVC
+        run: vvencapp -i bbbbeforenw.yuv -s 1280x720 -r 24 --preset fast --qp 35 --tier high gpactestvvc.266
+      - name: Check .266 file info with mp4box
+        run: mp4box -info gpactestvvc.266
