@@ -24,3 +24,8 @@ jobs:
         run: vvencapp -i bbbbeforenw.yuv -s 1280x720 -r 24 --preset fast --qp 35 --tier high -o gpactestvvc.266
       - name: Check .266 file info with mp4box
         run: mp4box -info gpactestvvc.266
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: gpac266
+          path: gpactestvvc.266
